@@ -1,0 +1,60 @@
+name: Build macOS Test App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/build-macos.yml"
+      - "config/**"
+      - "services/**"
+      - "src/**"
+      - "src-tauri/**"
+      - "package.json"
+      - "package-lock.json"
+      - "requirements.txt"
+      - "vite.config.ts"
+      - "tsconfig.json"
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install macOS dependencies
+        run: bash scripts/setup_macos.sh
+
+      - name: Run frontend tests
+        run: npm test
+
+      - name: Run Python tests
+        run: .venv/bin/python -m unittest discover -s tests -v
+
+      - name: Build Tauri macOS app
+        run: npm run tauri -- build
+
+      - name: Upload macOS bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: WezaFlow-macOS-test-build
+          path: |
+            src-tauri/target/release/bundle/macos/*.app
+            src-tauri/target/release/bundle/dmg/*.dmg
+          if-no-files-found: error

@@ -1,0 +1,13 @@
+profiles:
+  - app_name: OUTLOOK.EXE
+    app_category: email
+    tone: formal
+  - app_name: Teams.exe
+    app_category: work_chat
+    tone: casual
+  - app_name: Code.exe
+    app_category: code
+    tone: code
+  - app_name: chrome.exe
+    app_category: browser
+    tone: casual

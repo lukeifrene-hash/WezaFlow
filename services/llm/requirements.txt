@@ -1,0 +1,4 @@
+ollama
+httpx
+fastapi
+uvicorn

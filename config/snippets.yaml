@@ -1,0 +1,3 @@
+snippets:
+  - trigger_phrase: insert my email
+    expansion: user@example.com

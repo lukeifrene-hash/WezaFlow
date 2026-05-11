@@ -1,0 +1,38 @@
+audio:
+  sample_rate: 16000
+  channels: 1
+  blocksize: 1024
+vad:
+  threshold: 0.012
+  min_speech_duration_ms: 250
+  trim_padding_ms: 700
+  trim_threshold: 0.004
+  quiet_threshold: 0.006
+  quiet_trim_padding_ms: 1000
+  quiet_trim_threshold: 0.002
+models:
+  whisper: small.en
+  whisper_compute_type: int8
+  whisper_cpu_threads: 2
+  whisper_speculative_cpu_threads: 2
+  ollama: qwen3.5:4b
+hotkeys:
+  dictation:
+  - MouseX2
+  - Ctrl+Alt+Space
+  command_mode:
+  - Ctrl+Alt+B
+injection:
+  method: clipboard
+  paste_delay_ms: 80
+history:
+  enabled: true
+  max_rows: 10000
+runtime:
+  profile: snappy
+  language: en
+  quiet_mode: false
+  quality_fallback: true
+  system_audio_ducking: true
+  system_audio_duck_volume: 8
+  use_ollama: false

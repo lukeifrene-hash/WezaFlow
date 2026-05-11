@@ -1,0 +1,6 @@
+faster-whisper
+silero-vad
+sounddevice
+numpy
+fastapi
+uvicorn
