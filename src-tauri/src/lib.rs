@@ -1022,7 +1022,7 @@ fn spawn_runtime_api(app: &AppHandle) -> Result<(), String> {
     command.creation_flags(CREATE_NO_WINDOW);
 
     let mut child = command.spawn().map_err(|err| err.to_string())?;
-    wait_for_runtime_api(&mut child, Duration::from_secs(8))?;
+    wait_for_runtime_api(&mut child, Duration::from_secs(30))?;
     record_runtime_pid(&root, child.id());
     *runtime = Some(child);
     Ok(())
@@ -1144,14 +1144,9 @@ fn runtime_api_is_compatible_with<F>(mut probe: F) -> bool
 where
     F: FnMut(&str) -> bool,
 {
-    [
-        "/health",
-        "/runtime/capabilities",
-        "/corrections/pending",
-        "/learning/suggestions",
-    ]
-    .into_iter()
-    .all(|path| probe(path))
+    ["/health", "/runtime/capabilities"]
+        .into_iter()
+        .all(|path| probe(path))
 }
 
 fn runtime_api_path_is_ok(path: &str, timeout: Duration) -> bool {
@@ -1394,13 +1389,13 @@ mod tests {
 
         let compatible = runtime_api_is_compatible_with(|path| {
             probed_paths.push(path.to_string());
-            path != "/corrections/pending"
+            path != "/runtime/capabilities"
         });
 
         assert!(!compatible);
-        assert!(probed_paths.contains(&"/health".to_string()));
         assert!(probed_paths.contains(&"/runtime/capabilities".to_string()));
-        assert!(probed_paths.contains(&"/corrections/pending".to_string()));
+        assert!(!probed_paths.contains(&"/corrections/pending".to_string()));
+        assert!(!probed_paths.contains(&"/learning/suggestions".to_string()));
     }
 
     #[test]

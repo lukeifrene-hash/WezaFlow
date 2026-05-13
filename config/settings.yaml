@@ -20,6 +20,7 @@ hotkeys:
   dictation:
   - MouseX2
   - Ctrl+Alt+Space
+  - Ctrl+T
   command_mode:
   - Ctrl+Alt+B
 injection:
